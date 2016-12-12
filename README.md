@@ -1,6 +1,6 @@
 # Argument Parser Exercise
 
-This is a coding exercise to make my own version of the [arg] library. The examples and the API and the exmples of this README are plainly ripped from the original.
+This is a coding exercise to make my own version of the [arg](https://github.com/Taywee/args) library. The examples and the API and the exmples of this README are plainly ripped from the original.
 
 # Examples
 
