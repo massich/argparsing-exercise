@@ -32,6 +32,13 @@ namespace args
     virtual ~ParseError() {};
   };
 
+  class Observer
+  {
+  public:
+    virtual void update(int value) = 0;
+    virtual void show(std::ostream &os) = 0;
+  };
+
   class ArgumentParser
   {
   private:
@@ -43,6 +50,8 @@ namespace args
 
     std::string longseparator;
 
+    std::vector< Observer *> _parameters;
+
   public:
     ArgumentParser(const std::string &description_, const std::string &epilog_ = std::string()) :
       description(description_),
@@ -50,6 +59,8 @@ namespace args
       longprefix("--"),
       shortprefix("-"),
       longseparator("=") {}
+
+    void add_parameter ( Observer *p); // @TODO: make this signature (const Observer *p)
 
 
     /** Pass the help menu into an ostream
@@ -64,6 +75,7 @@ namespace args
     // template <typename T> void ParseArgs(const T &args);
     void parseArgs(const std::string &args);
     void parseArgs(const std::vector<std::string> &args);
+    void parseArgs(int argc, char **argv); // @TODO: change signature to (const int argc, const char *const * argv)
   };
 
   struct FlagId{
@@ -75,16 +87,25 @@ namespace args
     FlagId(const char flag) : isShort(true), shortId(flag), longId() {}
   };
 
-  class Flag
+  class Flag : public Observer
   {
+    std::string name;
+    std::string description;
   public:
-    Flag( const ArgumentParser &p, const std::string &a_, const std::string &b_ , std::initializer_list<FlagId> flags ) {}
+    Flag( ArgumentParser &p, const std::string &a_, const std::string &b_ , std::initializer_list<FlagId> flags ):
+      name(a_),
+      description(b_)
+    {
+      p.add_parameter(this);
+    }
+    /* virtual */void update(int v);
+    /* virtual */void show(std::ostream &os);
   };
 
   class HelpFlag : public Flag
   {
   public:
-    HelpFlag( const ArgumentParser &p, const std::string &a_, const std::string &b_ , std::initializer_list<FlagId> flags ) :
+    HelpFlag( ArgumentParser &p, const std::string &a_, const std::string &b_ , std::initializer_list<FlagId> flags ) :
       Flag(p, a_, b_, flags) {}
   };
 }

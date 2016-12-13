@@ -25,17 +25,17 @@ TEST ( argparse_exception_throw, help_exception_if_help_flag_or_noargs)
 //   ASSERT_THROW ( args::ParseError, parser.ParseArgs(std::vector<std::string>{"-H"}) );
 // }
 
-// TEST ( argparse, boolean_flags )
-// {
-//   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-//   args::Flag foo ( parser, "FOO", "test flag", {'f', "foo"} );
-//   args::Flag bar ( parser, "BAR", "test flag", {'b', "bar"} );
-//   args::Flag baz ( parser, "BAZ", "test flag", {'a', "baz"} );
-//   parser.ParseArgs ( std::vector<std::string>{"--foo", "-b"} );
-//   ASSERT_EQ ( true,  foo );
-//   ASSERT_EQ ( true,  bar );
-//   ASSERT_EQ ( false, baz );
-// }
+TEST ( argparse, boolean_flags )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Flag foo ( parser, "FOO", "test flag", {'f', "foo"} );
+  args::Flag bar ( parser, "BAR", "test flag", {'b', "bar"} );
+  args::Flag baz ( parser, "BAZ", "test flag", {'a', "baz"} );
+  parser.ParseArgs ( std::vector<std::string>{"--foo", "-b"} );
+  ASSERT_EQ ( true,  foo );
+  ASSERT_EQ ( true,  bar );
+  ASSERT_EQ ( false, baz );
+}
 
 // TEST ( argparse, boolean_flags_cluster )
 // {
