@@ -49,6 +49,28 @@ TEST ( argparse, int_flags )
   ASSERT_EQ ( 0, baz.get() );
 }
 
+TEST ( argparse, char_flags )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Parameter<char> foo ( parser, "FOO", "test flag", {'f', "foo"}, 'a' );
+  args::Parameter<char> bar ( parser, "BAR", "test flag", {'b', "bar"}, 'a' );
+  args::Parameter<char> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 'a' );
+  parser.parseArgs ( std::vector<std::string>{"--foo", "b", "-b", "c"} );
+  ASSERT_EQ ( 700,  foo.get());
+  ASSERT_EQ ( 8,  bar.get() );
+  ASSERT_EQ ( 0, baz.get() );
+}
+
+TEST ( argparse, generic_flags )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Parameter<int> foo ( parser, "FOO", "test flag", {'f', "foo"}, 0 );
+  args::Parameter<char> bar ( parser, "BAR", "test flag", {'b', "bar"}, 'a' );
+  parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "c"} );
+  ASSERT_EQ ( 700,  foo.get());
+  ASSERT_EQ ( 8,  bar.get() );
+}
+
 // TEST ( argparse, boolean_flags_cluster )
 // {
 //   args::ArgumentParser parser("This is a test program.", "This goes after the options.");
