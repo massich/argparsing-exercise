@@ -35,10 +35,19 @@ namespace args
   class Observer
   {
   public:
-    virtual void update(int value) = 0;
+    virtual void update(std::vector<std::string> &args) = 0;
     virtual void show(std::ostream &os) = 0;
+    // @TODO: the getter should be here but then I don't know how to template the output
+    // auto get() = 0; ?????
+    // template <typename Parameter>
+    // virtual Parameter get() = 0;
   };
 
+  template <typename Parameter>
+  auto get(Option &option_) -> decltype(option_.Get())
+  {
+    return option_.Get();
+  }
   class ArgumentParser
   {
   private:
@@ -91,22 +100,28 @@ namespace args
   {
     std::string name;
     std::string description;
+    std::vector<FlagId> flags;
+    bool value;
+
   public:
-    Flag( ArgumentParser &p, const std::string &a_, const std::string &b_ , std::initializer_list<FlagId> flags ):
-      name(a_),
-      description(b_)
+    Flag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ):
+      name(name_),
+      description(description_),
+      flags(flags_),
+      value(false)
     {
       p.add_parameter(this);
     }
-    /* virtual */void update(int v);
+    /* virtual */void update(std::vector<std::string> &args);
     /* virtual */void show(std::ostream &os);
+    bool get();
   };
 
   class HelpFlag : public Flag
   {
   public:
-    HelpFlag( ArgumentParser &p, const std::string &a_, const std::string &b_ , std::initializer_list<FlagId> flags ) :
-      Flag(p, a_, b_, flags) {}
+    HelpFlag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ) :
+      Flag(p, name_, description_, flags_) {}
   };
 }
 

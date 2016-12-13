@@ -1,5 +1,6 @@
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 #include "argparse.h"
 
 // template <typename T> void args::ArgumentParser::ParseArgs(const T &args)
@@ -8,15 +9,16 @@ void args::ArgumentParser::parseArgs(const std::string &args)
   std::cout << "ParseArgs string" << std::endl;
   throw Help("parseArgs string error");
 }
+
 void args::ArgumentParser::parseArgs(const std::vector<std::string> &args)
 {
-  std::cout << "ParseArgs vector" << std::endl;
+  std::vector<std::string> consumible_args(args);
+  for (const auto p: _parameters)
+    {
+      p->update(consumible_args);
+    }
   int i=0;
-  for ( auto &s : args) {
-    std::cout << i++ << "  " << s << std::endl;
-  }
 }
-
 
 void args::ArgumentParser::add_parameter ( Observer *p)
 {
@@ -70,12 +72,43 @@ std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser)
   return os;
 }
 
-void args::Flag::update(int v)
+std::string flagId_to_string(const args::FlagId &f)
 {
-  std::cout << "this is Flag update observer" << std::endl;
+  std::string out("-");
+  if (f.isShort)
+    out.append(1, f.shortId);
+  else
+    {
+      out.append("-"+f.longId);
+    }
+  // @TODO return (f.isShort) ? "-"+f.shortId : "--"+f.longId;
+  return out;
+}
+
+bool args::Flag::get()
+{
+  return this->value;
+}
+
+void args::Flag::update(std::vector<std::string> &args)
+{
+  for (auto &f: this->flags)
+  {
+    auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
+    if ( it != args.end() )
+    {
+      this->value = true;
+      it = args.erase(it);
+      break;
+    }
+  }
 }
 
 void args::Flag::show(std::ostream &os)
 {
-  os << "A:" << this->name << " B:" << this->description ;
+  for (auto &f: this->flags)
+    {
+      os << flagId_to_string(f) + ", ";
+    }
+  os << "\t" << this->description ;
 }
