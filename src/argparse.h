@@ -43,11 +43,6 @@ namespace args
     // virtual Parameter get() = 0;
   };
 
-  template <typename Parameter>
-  auto get(Option &option_) -> decltype(option_.Get())
-  {
-    return option_.Get();
-  }
   class ArgumentParser
   {
   private:
@@ -96,6 +91,7 @@ namespace args
     FlagId(const char flag) : isShort(true), shortId(flag), longId() {}
   };
 
+
   class Flag : public Observer
   {
     std::string name;
@@ -122,6 +118,30 @@ namespace args
   public:
     HelpFlag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ) :
       Flag(p, name_, description_, flags_) {}
+  };
+
+  // template <typename Parameter_type>
+  // using Parameter_type = typename int;
+  class Parameter : public Observer
+  {
+    std::string name;
+    std::string description;
+    std::vector<FlagId> flags;
+    int value;
+
+  public:
+    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+               std::initializer_list<FlagId> flags_, const int &default_value):
+      name(name_),
+      description(description_),
+      flags(flags_),
+      value(default_value)
+    {
+      p.add_parameter(this);
+    }
+    /* virtual */void update(std::vector<std::string> &args);
+    /* virtual */void show(std::ostream &os);
+    int get();
   };
 }
 

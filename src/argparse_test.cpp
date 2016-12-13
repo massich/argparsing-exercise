@@ -31,10 +31,22 @@ TEST ( argparse, boolean_flags )
   args::Flag foo ( parser, "FOO", "test flag", {'f', "foo"} );
   args::Flag bar ( parser, "BAR", "test flag", {'b', "bar"} );
   args::Flag baz ( parser, "BAZ", "test flag", {'a', "baz"} );
-  parser.ParseArgs ( std::vector<std::string>{"--foo", "-b"} );
-  ASSERT_EQ ( true,  foo );
-  ASSERT_EQ ( true,  bar );
-  ASSERT_EQ ( false, baz );
+  parser.parseArgs ( std::vector<std::string>{"--foo", "-b"} );
+  ASSERT_EQ ( true,  foo.get());
+  ASSERT_EQ ( true,  bar.get() );
+  ASSERT_EQ ( false, baz.get() );
+}
+
+TEST ( argparse, int_flags )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Parameter foo ( parser, "FOO", "test flag", {'f', "foo"}, 0 );
+  args::Parameter bar ( parser, "BAR", "test flag", {'b', "bar"}, 0 );
+  args::Parameter baz ( parser, "BAZ", "test flag", {'a', "baz"}, 0 );
+  parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8"} );
+  ASSERT_EQ ( 700,  foo.get());
+  ASSERT_EQ ( 8,  bar.get() );
+  ASSERT_EQ ( 0, baz.get() );
 }
 
 // TEST ( argparse, boolean_flags_cluster )
