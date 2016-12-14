@@ -113,7 +113,39 @@ void args::Flag::show(std::ostream &os)
   os << "\t" << this->description ;
 }
 
-void args::Parameter::update(std::vector<std::string> &args)
+void args::ParameterInt::update(std::vector<std::string> &args)
+{
+  for (auto &f: this->flags)
+    {
+      auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
+      if ( it != args.end() )
+        {
+          auto element_it = it;
+          std::stringstream(*(++element_it)) >> this->value;
+          element_it = args.erase(element_it);
+          it = args.erase(it);
+          break;
+        }
+    }
+}
+
+void args::ParameterChar::update(std::vector<std::string> &args)
+{
+  for (auto &f: this->flags)
+    {
+      auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
+      if ( it != args.end() )
+        {
+          auto element_it = it;
+          std::stringstream(*(++element_it)) >> this->value;
+          element_it = args.erase(element_it);
+          it = args.erase(it);
+          break;
+        }
+    }
+}
+
+void args::ParameterStr::update(std::vector<std::string> &args)
 {
   for (auto &f: this->flags)
     {
@@ -133,13 +165,43 @@ void args::Parameter::update(std::vector<std::string> &args)
  * to inhered both should be crated.
  *
  */
-int args::Parameter::get()
+int args::ParameterInt::get()
 {
   return this->value;
 }
 
 
-void args::Parameter::show(std::ostream &os)
+void args::ParameterInt::show(std::ostream &os)
+{
+  for (auto &f: this->flags)
+    {
+      os << flagId_to_string(f) + ", ";
+    }
+  os << "\t" << this->description ;
+}
+
+char args::ParameterChar::get()
+{
+  return this->value;
+}
+
+
+void args::ParameterChar::show(std::ostream &os)
+{
+  for (auto &f: this->flags)
+    {
+      os << flagId_to_string(f) + ", ";
+    }
+  os << "\t" << this->description ;
+}
+
+std::string args::ParameterStr::get()
+{
+  return this->value;
+}
+
+
+void args::ParameterStr::show(std::ostream &os)
 {
   for (auto &f: this->flags)
     {

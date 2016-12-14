@@ -122,7 +122,7 @@ namespace args
 
   // template <typename Parameter_type>
   // using Parameter_type = typename int;
-  class Parameter : public Observer
+  class ParameterInt : public Observer
   {
     std::string name;
     std::string description;
@@ -130,7 +130,7 @@ namespace args
     int value;
 
   public:
-    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+    ParameterInt( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
                std::initializer_list<FlagId> flags_, const int &default_value):
       name(name_),
       description(description_),
@@ -142,6 +142,50 @@ namespace args
     /* virtual */void update(std::vector<std::string> &args);
     /* virtual */void show(std::ostream &os);
     int get();
+  };
+
+  class ParameterChar : public Observer
+  {
+    std::string name;
+    std::string description;
+    std::vector<FlagId> flags;
+    char value;
+
+  public:
+    ParameterChar( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+               std::initializer_list<FlagId> flags_, const char &default_value):
+      name(name_),
+      description(description_),
+      flags(flags_),
+      value(default_value)
+    {
+      p.add_parameter(this);
+    }
+    /* virtual */void update(std::vector<std::string> &args);
+    /* virtual */void show(std::ostream &os);
+    char get();
+  };
+
+  class ParameterStr : public Observer
+  {
+    std::string name;
+    std::string description;
+    std::vector<FlagId> flags;
+    std::string value;
+
+  public:
+    ParameterStr( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+                  std::initializer_list<FlagId> flags_, const std::string &default_value):
+      name(name_),
+      description(description_),
+      flags(flags_),
+      value ( default_value )
+    {
+      p.add_parameter(this);
+    }
+    /* virtual */void update(std::vector<std::string> &args);
+    /* virtual */void show(std::ostream &os);
+    std::string get();
   };
 }
 
