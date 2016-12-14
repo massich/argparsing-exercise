@@ -4,6 +4,8 @@
 #include <string>
 
 #include <vector>
+#include <algorithm>
+#include <sstream>
 
 /** \namespace args
  * \brief contains all the functionality of the args library
@@ -140,61 +142,58 @@ namespace args
     }
   };
 
-
-  class ParameterInt : public Parameter
+  template < typename T >
+  class ParameterXX : public Parameter
   {
-    int value;
+    T value;
+
   public:
-    ParameterInt( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-                  std::initializer_list<FlagId> flags_, const int &default_value):
+    ParameterXX( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+                  std::initializer_list<FlagId> flags_, const T &default_value):
       Parameter(p, name_, description_, flags_), value(default_value) {}
-    int get();
-    /* virtual */void update(std::vector<std::string> &args) override;
-    /* virtual */void show(std::ostream &os) override;
-  };
-
-  class ParameterChar : public Observer
-  {
-    std::string name;
-    std::string description;
-    std::vector<FlagId> flags;
-    char value;
-
-  public:
-    ParameterChar( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-               std::initializer_list<FlagId> flags_, const char &default_value):
-      name(name_),
-      description(description_),
-      flags(flags_),
-      value(default_value)
+    /* virtual */void update(std::vector<std::string> &args) override
     {
-      p.add_parameter(this);
+      for (auto &f: this->flags)
+        {
+          std::string out("-");
+          if (f.isShort)
+            out.append(1, f.shortId);
+          else
+            {
+              out.append("-"+f.longId);
+            }
+          auto it = std::find(args.begin(), args.end(), out );
+          if ( it != args.end() )
+            {
+              auto element_it = it;
+              std::stringstream(*(++element_it)) >> this->value;
+              element_it = args.erase(element_it);
+              it = args.erase(it);
+              break;
+            }
+        }
     }
-    /* virtual */void update(std::vector<std::string> &args);
-    /* virtual */void show(std::ostream &os);
-    char get();
-  };
-
-  class ParameterStr : public Observer
-  {
-    std::string name;
-    std::string description;
-    std::vector<FlagId> flags;
-    std::string value;
-
-  public:
-    ParameterStr( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-                  std::initializer_list<FlagId> flags_, const std::string &default_value):
-      name(name_),
-      description(description_),
-      flags(flags_),
-      value ( default_value )
+    /* virtual */void show(std::ostream &os) override
     {
-      p.add_parameter(this);
+      for (auto &f: this->flags)
+        {
+          std::string out("-");
+          if (f.isShort)
+            out.append(1, f.shortId);
+          else
+            {
+              out.append("-"+f.longId);
+            }
+          os << out << ", ";
+        }
+      os << "\t" << this->description ;
     }
-    /* virtual */void update(std::vector<std::string> &args);
-    /* virtual */void show(std::ostream &os);
-    std::string get();
+
+    T get()
+    {
+      return this->value;
+    }
+
   };
 }
 

@@ -40,9 +40,9 @@ TEST ( argparse, boolean_flags )
 TEST ( argparse, int_flags )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::ParameterInt foo ( parser, "FOO", "test flag", {'f', "foo"}, 0 );
-  args::ParameterInt bar ( parser, "BAR", "test flag", {'b', "bar"}, 0 );
-  args::ParameterInt baz ( parser, "BAZ", "test flag", {'a', "baz"}, 0 );
+  args::ParameterXX<int> foo ( parser, "FOO", "test flag", {'f', "foo"}, 0 );
+  args::ParameterXX<int> bar ( parser, "BAR", "test flag", {'b', "bar"}, 0 );
+  args::ParameterXX<int> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 0 );
   parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8"} );
   ASSERT_EQ ( 700,  foo.get());
   ASSERT_EQ ( 8,  bar.get() );
@@ -52,9 +52,9 @@ TEST ( argparse, int_flags )
 TEST ( argparse, char_flags )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::ParameterChar foo ( parser, "FOO", "test flag", {'f', "foo"}, 'a' );
-  args::ParameterChar bar ( parser, "BAR", "test flag", {'b', "bar"}, 'a' );
-  args::ParameterChar baz ( parser, "BAZ", "test flag", {'a', "baz"}, 'a' );
+  args::ParameterXX<char> foo ( parser, "FOO", "test flag", {'f', "foo"}, 'a' );
+  args::ParameterXX<char> bar ( parser, "BAR", "test flag", {'b', "bar"}, 'a' );
+  args::ParameterXX<char> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 'a' );
   parser.parseArgs ( std::vector<std::string>{"--foo", "f", "-b", "b"} );
   ASSERT_EQ ( 'f',  foo.get());
   ASSERT_EQ ( 'b',  bar.get() );
@@ -64,13 +64,20 @@ TEST ( argparse, char_flags )
 TEST ( argparse, string_flags )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::ParameterStr foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
-  args::ParameterStr bar ( parser, "BAR", "test flag", {'b', "bar"}, "defalut" );
-  args::ParameterStr baz ( parser, "BAZ", "test flag", {"defalut", "baz"}, "default" );
+  args::ParameterXX<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
+  args::ParameterXX<std::string> bar ( parser, "BAR", "test flag", {'b', "bar"}, "defalut" );
+  args::ParameterXX<std::string> baz ( parser, "BAZ", "test flag", {"defalut", "baz"}, "default" );
   parser.parseArgs ( std::vector<std::string>{"--foo", "foo_string", "-b", "bar_string"} );
   ASSERT_EQ ( "foo_string",  foo.get());
   ASSERT_EQ ( "bar_string",  bar.get() );
   ASSERT_EQ ( "default",  baz.get() );
+}
+
+TEST ( argparse, templated_flags )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::ParameterXX<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
+  parser.parseArgs ( std::vector<std::string>{"--foo", "foo_string", "-b", "bar_string"} );
 }
 
 // TEST ( argparse, boolean_flags_cluster )
