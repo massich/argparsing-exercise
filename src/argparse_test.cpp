@@ -66,7 +66,7 @@ TEST ( argparse, string_flags )
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
   args::ParameterXX<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
   args::ParameterXX<std::string> bar ( parser, "BAR", "test flag", {'b', "bar"}, "defalut" );
-  args::ParameterXX<std::string> baz ( parser, "BAZ", "test flag", {"defalut", "baz"}, "default" );
+  args::ParameterXX<std::string> baz ( parser, "BAZ", "test flag", {'a', "baz"}, "default" );
   parser.parseArgs ( std::vector<std::string>{"--foo", "foo_string", "-b", "bar_string"} );
   ASSERT_EQ ( "foo_string",  foo.get());
   ASSERT_EQ ( "bar_string",  bar.get() );

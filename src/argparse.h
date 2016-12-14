@@ -150,50 +150,11 @@ namespace args
   public:
     ParameterXX( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
                   std::initializer_list<FlagId> flags_, const T &default_value):
-      Parameter(p, name_, description_, flags_), value(default_value) {}
-    /* virtual */void update(std::vector<std::string> &args) override
-    {
-      for (auto &f: this->flags)
-        {
-          std::string out("-");
-          if (f.isShort)
-            out.append(1, f.shortId);
-          else
-            {
-              out.append("-"+f.longId);
-            }
-          auto it = std::find(args.begin(), args.end(), out );
-          if ( it != args.end() )
-            {
-              auto element_it = it;
-              std::stringstream(*(++element_it)) >> this->value;
-              element_it = args.erase(element_it);
-              it = args.erase(it);
-              break;
-            }
-        }
-    }
-    /* virtual */void show(std::ostream &os) override
-    {
-      for (auto &f: this->flags)
-        {
-          std::string out("-");
-          if (f.isShort)
-            out.append(1, f.shortId);
-          else
-            {
-              out.append("-"+f.longId);
-            }
-          os << out << ", ";
-        }
-      os << "\t" << this->description ;
-    }
+      Parameter(p, name_, description_, flags_), value(default_value) {};
 
-    T get()
-    {
-      return this->value;
-    }
-
+    /* virtual */void update(std::vector<std::string> &args) override;
+    /* virtual */void show(std::ostream &os) override;
+    T get();
   };
 }
 
