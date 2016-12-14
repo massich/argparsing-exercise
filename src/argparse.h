@@ -122,26 +122,35 @@ namespace args
 
   // template <typename Parameter_type>
   // using Parameter_type = typename int;
-  class ParameterInt : public Observer
+  class Parameter: public Observer
   {
+  protected:
     std::string name;
     std::string description;
     std::vector<FlagId> flags;
-    int value;
 
   public:
-    ParameterInt( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-               std::initializer_list<FlagId> flags_, const int &default_value):
+    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+               std::initializer_list<FlagId> flags_):
       name(name_),
       description(description_),
-      flags(flags_),
-      value(default_value)
+      flags(flags_)
     {
       p.add_parameter(this);
     }
-    /* virtual */void update(std::vector<std::string> &args);
-    /* virtual */void show(std::ostream &os);
+  };
+
+
+  class ParameterInt : public Parameter
+  {
+    int value;
+  public:
+    ParameterInt( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+                  std::initializer_list<FlagId> flags_, const int &default_value):
+      Parameter(p, name_, description_, flags_), value(default_value) {}
     int get();
+    /* virtual */void update(std::vector<std::string> &args) override;
+    /* virtual */void show(std::ostream &os) override;
   };
 
   class ParameterChar : public Observer
