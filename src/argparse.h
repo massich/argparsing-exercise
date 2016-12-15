@@ -155,7 +155,11 @@ namespace args
     /* virtual */void update(std::vector<std::string> &args) override;
     /* virtual */void show(std::ostream &os) override;
     T get();
+
   };
 }
 
 std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser);
+std::string flagId_to_string(const args::FlagId &f);
+
+#include "argparse.tpp"
