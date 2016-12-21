@@ -77,6 +77,18 @@ TEST ( argparse, string_with_spaces )
   ASSERT_EQ ( "\"foo string\"",  foo.get() );
 }
 
+TEST ( argparse, multi_parameter )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::MultiParameter<int, 1> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, 0 );
+  args::MultiParameter<int, 2> bar ( parser, "BAR", "test two elements multi-parameter", {'b', "bar"}, 0 );
+  parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8", "10"} );
+  int foo_answer [] = {700};
+  int bar_answer [] = {8, 10};
+  ASSERT_EQ ( foo_answer,  foo.get());
+  ASSERT_EQ ( bar_answer,  bar.get() );
+}
+
 
 int main(int ac, char* av[])
 {
