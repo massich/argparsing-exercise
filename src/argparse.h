@@ -163,7 +163,6 @@ namespace args
   class MultiParameter : public Parameter
   {
     std::array<T,N> value;
-    //T value[N];
 
   public:
     MultiParameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,

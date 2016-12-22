@@ -80,8 +80,8 @@ TEST ( argparse, string_with_spaces )
  TEST ( argparse, multi_parameter )
  {
    args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-   args::MultiParameter<int, 1> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"});//, 0 );
-   args::MultiParameter<int, 2> bar ( parser, "BAR", "test two elements multi-parameter", {'b', "bar"});//, 0 );
+   args::MultiParameter<int, 1> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"});
+   args::MultiParameter<int, 2> bar ( parser, "BAR", "test two elements multi-parameter", {'b', "bar"});
    parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8", "10"} );
 
    std::array<int,1> foo_answer = {700};
