@@ -8,6 +8,7 @@ find_package(GTest)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 add_executable(main src/argparse.h src/argparse.cpp main.cpp)
+add_executable(example src/example.cpp)
 
 add_executable(runUnitTest src/argparse.h src/argparse.cpp src/argparse_test.cpp)
 target_link_libraries(runUnitTest ${GTEST_MAIN_LIBRARIES} ${GTEST_LIBRARIES})

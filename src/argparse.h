@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <exception>
 #include <string>
+#include <array>
 
 #include <vector>
 #include <algorithm>
@@ -155,6 +156,23 @@ namespace args
     /* virtual */void update(std::vector<std::string> &args) override;
     /* virtual */void show(std::ostream &os) override;
     T get();
+
+  };
+
+  template < typename T, std::size_t N >
+  class MultiParameter : public Parameter
+  {
+    std::array<T,N> value;
+    //T value[N];
+
+  public:
+    MultiParameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+                  std::initializer_list<FlagId> flags_)://, const T &default_value):
+      Parameter(p, name_, description_, flags_){};//, value(default_value) {};
+
+    /* virtual */void update(std::vector<std::string> &args) override;
+    /* virtual */void show(std::ostream &os) override;
+    std::array<T,N> get();
 
   };
 }
