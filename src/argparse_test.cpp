@@ -83,23 +83,12 @@ TEST ( argparse, string_with_spaces )
    args::MultiParameter<int, 1> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"});//, 0 );
    args::MultiParameter<int, 2> bar ( parser, "BAR", "test two elements multi-parameter", {'b', "bar"});//, 0 );
    parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8", "10"} );
-//   int foo_answer [] = {700};
-//   int bar_answer [] = {8, 10};
 
    std::array<int,1> foo_answer = {700};
    std::array<int,2> bar_answer = {8, 10};
 
-   auto foo_answer_ = foo.get();
-   auto bar_answer_ = bar.get();
-   int i = 0;
-   for (auto f: foo_answer_)
-        std::cout << '(' << i << ',' << f <<')' << '\n';
-   i = 0;
-   for (auto b: bar_answer_)
-        std::cout << '(' << i << ',' << b <<')' << '\n';
-   ASSERT_EQ ( foo_answer, foo_answer_);
-//   ASSERT_EQ ( foo_answer,  foo.get());
-//   ASSERT_EQ ( bar_answer,  bar.get() );
+   ASSERT_EQ ( foo_answer,  foo.get());
+   ASSERT_EQ ( bar_answer,  bar.get() );
  }
 
 

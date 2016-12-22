@@ -61,9 +61,5 @@ void args::MultiParameter<T, N>::update(std::vector<std::string> &args) {
 template < typename T, std::size_t N >
 std::array<T,N> args::MultiParameter<T,N>::get()
 {
-  for ( auto i=0; i<N; ++i)
-      {
-          std::cout << '(' << i << ',' << this->value[i] <<')' << '\n';
-      }
   return this->value;
 }
