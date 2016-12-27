@@ -169,11 +169,39 @@ namespace args
                   std::initializer_list<FlagId> flags_)://, const T &default_value):
       Parameter(p, name_, description_, flags_){};//, value(default_value) {};
 
+    MultiParameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+                    std::initializer_list<FlagId> flags_, const std::array<T,N> &default_value):
+      Parameter(p, name_, description_, flags_)
+    {
+      value = default_value;
+    };
+
     /* virtual */void update(std::vector<std::string> &args) override;
     /* virtual */void show(std::ostream &os) override;
     std::array<T,N> get();
 
   };
+
+  // template < typename T, std::size_t N >
+  // class Base{
+  // public:
+  //   int dummy;
+  //   std::array<T,N> a;
+    
+  //   template <typename... J> 
+  //   Base (int d_, J... ts) : a{ts...}, dummy(d_) {};
+    
+  // };
+  // // la resposta al problema hauria de ser aqui http://en.cppreference.com/w/c/language/array_initialization
+
+  // struct foo { 
+  //   int x[2]; 
+  //   template <typename... T> 
+  //   foo(T... ts) : x{ts...} { // note the use of brace-init-list
+  //   } 
+  // };
+
+
 }
 
 std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser);

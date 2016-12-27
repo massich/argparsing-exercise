@@ -91,6 +91,15 @@ TEST ( argparse, DISABLED_string_with_spaces )
    ASSERT_EQ ( bar_answer,  bar.get() );
  }
 
+TEST ( argparse, multi_parameter_defaults )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  const std::array<int,2> foo_default = {8, 10};
+  args::MultiParameter<int, 2> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default);
+  parser.parseArgs ( std::vector<std::string>{} );
+
+  ASSERT_EQ ( foo_default,  foo.get());
+}
 
 int main(int ac, char* av[])
 {
