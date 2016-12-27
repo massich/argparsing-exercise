@@ -68,7 +68,7 @@ TEST ( argparse, string_flags )
   ASSERT_EQ ( "default",  baz.get() );
 }
 
-TEST ( argparse, string_with_spaces )
+TEST ( argparse, DISABLED_string_with_spaces )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
   args::ParameterXX<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
