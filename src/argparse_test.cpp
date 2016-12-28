@@ -85,26 +85,17 @@ struct MyType{
 
 bool operator==(const MyType &a, const MyType &b)
 {
-  return ( a.i == b.i ) && (a.s == b.s);
+  return std::tie(a.i, a.s) == std::tie(b.i, b.s);
 }
 
 std::ostream& operator << (std::ostream& o, const MyType &element)
 {
-  o << element.i << ", " << element.s ;
-  return o;
+  return o << element.i << ", " << element.s ;
 }
 
 std::istream& operator>>(std::istream &input,MyType &o)
 {
-  int i;
-  std::string s;
-  input>>o.i;
-  input>>o.s;
-  // input>>s;
-
-  // o = std::make_tuple(i,s);
-
-  return input;
+  return input >> o.i >> o.s;
 }
 
 
