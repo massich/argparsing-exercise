@@ -202,9 +202,11 @@ namespace args
   // };
 
 
+  std::vector<std::string> string2tokens(int argc, const char *const *argv);
 }
 
 std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser);
 std::string flagId_to_string(const args::FlagId &f);
+
 
 #include "argparse.tpp"

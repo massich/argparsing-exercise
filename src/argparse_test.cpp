@@ -77,28 +77,65 @@ TEST ( argparse, DISABLED_string_with_spaces )
   ASSERT_EQ ( "\"foo string\"",  foo.get() );
 }
 
- TEST ( argparse, multi_parameter )
- {
-   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-   args::MultiParameter<int, 1> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"});
-   args::MultiParameter<int, 2> bar ( parser, "BAR", "test two elements multi-parameter", {'b', "bar"});
-   parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8", "10"} );
+using MyType = std::tuple<int,std::string>;
 
-   std::array<int,1> foo_answer = {700};
-   std::array<int,2> bar_answer = {8, 10};
-
-   ASSERT_EQ ( foo_answer,  foo.get());
-   ASSERT_EQ ( bar_answer,  bar.get() );
- }
-
-TEST ( argparse, multi_parameter_defaults )
+std::istream& operator>>(std::istream &input,MyType &o)
 {
-  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  const std::array<int,2> foo_default = {8, 10};
-  args::MultiParameter<int, 2> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default);
-  parser.parseArgs ( std::vector<std::string>{} );
+  int i;
+  std::string s;
+  input>>i;
+  input>>s;
 
-  ASSERT_EQ ( foo_default,  foo.get());
+  o = std::make_tuple(i,s);
+
+  return input;
+}
+
+
+ // TEST ( argparse, multi_parameter )
+ // {//   const MyType foo_default{42,"foo"}; //   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+ //   args::ParameterXX<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
+ //   parser.parseArgs ( std::vector<std::string>{"--foo", "0", "xxxx"} );
+
+ //   const MyType foo_answer{0,"xxxx"};
+
+ //   ASSERT_EQ ( foo_answer,  foo.get());
+ // }
+
+// TEST ( argparse, multi_parameter_defaults )
+// {
+//   const MyType foo_default{42,"foo"};
+//   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+//   args::ParameterXX<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
+//   parser.parseArgs ( std::vector<std::string>{} );
+
+//   ASSERT_EQ ( foo_default,  foo.get());
+// }
+
+TEST ( argparse_string2tokens, when_empty)
+{
+  const std::string input="./test";
+  const char* argv = &input[0];
+  const auto answer = args::string2tokens(1, &argv );
+  EXPECT_TRUE(answer.empty());
+}
+
+TEST ( argparse_string2tokens, when_flag)
+{
+  const char* argv[] = {"./test", "--foo", NULL};
+  const int argc = sizeof(argv) / sizeof(char*) -1;
+  const auto answer = args::string2tokens(argc, argv );
+  const std::vector<std::string> expected_answer {"foo", ""};
+  ASSERT_EQ( expected_answer, answer );
+}
+
+TEST ( argparse_string2tokens, when_element)
+{
+  const char* argv[] = {"./test", "--foo", "FOO", "3", NULL};
+  const int argc = sizeof(argv) / sizeof(char*) -1;
+  const auto answer = args::string2tokens(argc, argv );
+  const std::vector<std::string> expected_answer {"foo", " FOO 3"};
+  ASSERT_EQ( expected_answer, answer );
 }
 
 int main(int ac, char* av[])
