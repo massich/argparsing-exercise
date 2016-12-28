@@ -27,7 +27,7 @@ void args::ArgumentParser::add_parameter ( Observer *p)
 
 void args::ArgumentParser::parseArgs(int argc, char **argv)
 {
-  const std::vector<std::string> arguments(argv, argv + argc);
+  const auto arguments = string2tokens(argc, argv);
   this->parseArgs(arguments);
 }
 
