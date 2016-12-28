@@ -25,7 +25,7 @@ void args::ArgumentParser::add_parameter ( Observer *p)
   this->_parameters.push_back(p);
 }
 
-void args::ArgumentParser::parseArgs(int argc, char **argv)
+void args::ArgumentParser::parseArgs(int argc, const char *const *argv)
 {
   const auto arguments = string2tokens(argc, argv);
   this->parseArgs(arguments);
@@ -131,13 +131,6 @@ namespace{
     return (token_position != 0);
   }
 
-  std::string get_key (std::string s)
-  {
-    const auto token_position = s.find_first_not_of("-");
-    return s.substr( token_position );
-  }
-
-
   std::vector<std::string> merge_keys_and_values(std::vector<std::string> &keys,
                                                  std::vector<std::string> &values)
   {
@@ -154,7 +147,7 @@ namespace{
   }
 }
 
-std::vector<std::string> args::string2tokens(int argc,const char *const *argv)
+std::vector<std::string> args::string2tokens(int argc, const char *const *argv)
 {
 
   const std::vector<std::string> arguments(&argv[1], argv + argc);
@@ -165,7 +158,7 @@ std::vector<std::string> args::string2tokens(int argc,const char *const *argv)
     if ( is_key(a) )
       {
         push_previous_parameter(keys, values, k, v);
-        k = get_key (a);
+        k = a;
         v.clear();
       }
     else

@@ -82,7 +82,7 @@ namespace args
     // template <typename T> void ParseArgs(const T &args);
     void parseArgs(const std::string &args);
     void parseArgs(const std::vector<std::string> &args);
-    void parseArgs(int argc, char **argv); // @TODO: change signature to (const int argc, const char *const * argv)
+    void parseArgs(int argc, const char *const *argv);
   };
 
   struct FlagId{

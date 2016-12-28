@@ -77,30 +77,51 @@ TEST ( argparse, DISABLED_string_with_spaces )
   ASSERT_EQ ( "\"foo string\"",  foo.get() );
 }
 
-using MyType = std::tuple<int,std::string>;
+// using MyType = std::tuple<int,std::string>;
+struct MyType{
+  int i;
+  std::string s;
+};
+
+bool operator==(const MyType &a, const MyType &b)
+{
+  return ( a.i == b.i ) && (a.s == b.s);
+}
+
+std::ostream& operator << (std::ostream& o, const MyType &element)
+{
+  o << element.i << ", " << element.s ;
+  return o;
+}
 
 std::istream& operator>>(std::istream &input,MyType &o)
 {
   int i;
   std::string s;
-  input>>i;
-  input>>s;
+  input>>o.i;
+  input>>o.s;
+  // input>>s;
 
-  o = std::make_tuple(i,s);
+  // o = std::make_tuple(i,s);
 
   return input;
 }
 
 
- // TEST ( argparse, multi_parameter )
- // {//   const MyType foo_default{42,"foo"}; //   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
- //   args::ParameterXX<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
- //   parser.parseArgs ( std::vector<std::string>{"--foo", "0", "xxxx"} );
+ TEST ( argparse, multi_parameter )
+ {
+   const char* argv[] = {"./test", "--foo", "0", "xxxx", NULL};
+   const int argc = sizeof(argv) / sizeof(char*) -1;
+   const MyType foo_default{42,"foo"};
+   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+   args::ParameterXX<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
+   parser.parseArgs ( argc, argv );
 
- //   const MyType foo_answer{0,"xxxx"};
+   const MyType foo_expected{0,"xxxx"};
+   const MyType foo_answer = foo.get(); 
 
- //   ASSERT_EQ ( foo_answer,  foo.get());
- // }
+   ASSERT_EQ ( foo_expected,  foo_answer);
+ }
 
 // TEST ( argparse, multi_parameter_defaults )
 // {
@@ -125,7 +146,7 @@ TEST ( argparse_string2tokens, when_flag)
   const char* argv[] = {"./test", "--foo", NULL};
   const int argc = sizeof(argv) / sizeof(char*) -1;
   const auto answer = args::string2tokens(argc, argv );
-  const std::vector<std::string> expected_answer {"foo", ""};
+  const std::vector<std::string> expected_answer {"--foo", ""};
   ASSERT_EQ( expected_answer, answer );
 }
 
@@ -134,7 +155,7 @@ TEST ( argparse_string2tokens, when_element)
   const char* argv[] = {"./test", "--foo", "FOO", "3", NULL};
   const int argc = sizeof(argv) / sizeof(char*) -1;
   const auto answer = args::string2tokens(argc, argv );
-  const std::vector<std::string> expected_answer {"foo", " FOO 3"};
+  const std::vector<std::string> expected_answer {"--foo", " FOO 3"};
   ASSERT_EQ( expected_answer, answer );
 }
 
