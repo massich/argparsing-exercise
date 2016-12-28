@@ -113,43 +113,45 @@ void args::Flag::show(std::ostream &os)
   os << "\t" << this->description ;
 }
 
-void push_previous_parameter( std::vector<std::string> &keys,
-                              std::vector<std::string> &values,
-                              std::string &k, std::string &v )
-{
-  if ( !k.empty() )
-    {
-      keys.push_back(k);
-      values.push_back(v);
-    }
-}
+namespace{
+  void push_previous_parameter( std::vector<std::string> &keys,
+                                std::vector<std::string> &values,
+                                std::string &k, std::string &v )
+  {
+    if ( !k.empty() )
+      {
+        keys.push_back(k);
+        values.push_back(v);
+      }
+  }
 
-const bool is_key (std::string s)
-{
-  const auto token_position = s.find_first_not_of("-");
-  return (token_position != 0);
-}
+  const bool is_key (std::string s)
+  {
+    const auto token_position = s.find_first_not_of("-");
+    return (token_position != 0);
+  }
 
-std::string get_key (std::string s)
-{
-  const auto token_position = s.find_first_not_of("-");
-  return s.substr( token_position );
-}
+  std::string get_key (std::string s)
+  {
+    const auto token_position = s.find_first_not_of("-");
+    return s.substr( token_position );
+  }
 
 
-std::vector<std::string> merge_keys_and_values(std::vector<std::string> &keys,
-                                               std::vector<std::string> &values)
-{
-  std::vector<std::string> result;
-  auto k_it = keys.begin();
-  auto v_it = values.begin();
-  int i;
-  for (; k_it < keys.end(); ++k_it, ++v_it)
-    {
-      result.push_back(*k_it);
-      result.push_back(*v_it);
-    }
-  return result;
+  std::vector<std::string> merge_keys_and_values(std::vector<std::string> &keys,
+                                                 std::vector<std::string> &values)
+  {
+    std::vector<std::string> result;
+    auto k_it = keys.begin();
+    auto v_it = values.begin();
+    int i;
+    for (; k_it < keys.end(); ++k_it, ++v_it)
+      {
+        result.push_back(*k_it);
+        result.push_back(*v_it);
+      }
+    return result;
+  }
 }
 
 std::vector<std::string> args::string2tokens(int argc,const char *const *argv)
