@@ -39,6 +39,7 @@ namespace args
   class Observer
   {
   public:
+    virtual ~Observer() = default;
     virtual void update(std::vector<std::string> &args) = 0;
     virtual void show(std::ostream &os) = 0;
   };
