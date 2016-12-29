@@ -39,9 +39,9 @@ TEST ( argparse, boolean_flags )
 TEST ( argparse, int_flags )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::ParameterXX<int> foo ( parser, "FOO", "test flag", {'f', "foo"}, 0 );
-  args::ParameterXX<int> bar ( parser, "BAR", "test flag", {'b', "bar"}, 0 );
-  args::ParameterXX<int> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 0 );
+  args::Parameter<int> foo ( parser, "FOO", "test flag", {'f', "foo"}, 0 );
+  args::Parameter<int> bar ( parser, "BAR", "test flag", {'b', "bar"}, 0 );
+  args::Parameter<int> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 0 );
   parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8"} );
   ASSERT_EQ ( 700,  foo.get());
   ASSERT_EQ ( 8,  bar.get() );
@@ -51,9 +51,9 @@ TEST ( argparse, int_flags )
 TEST ( argparse, char_flags )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::ParameterXX<char> foo ( parser, "FOO", "test flag", {'f', "foo"}, 'a' );
-  args::ParameterXX<char> bar ( parser, "BAR", "test flag", {'b', "bar"}, 'a' );
-  args::ParameterXX<char> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 'a' );
+  args::Parameter<char> foo ( parser, "FOO", "test flag", {'f', "foo"}, 'a' );
+  args::Parameter<char> bar ( parser, "BAR", "test flag", {'b', "bar"}, 'a' );
+  args::Parameter<char> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 'a' );
   parser.parseArgs ( std::vector<std::string>{"--foo", "f", "-b", "b"} );
   ASSERT_EQ ( 'f',  foo.get());
   ASSERT_EQ ( 'b',  bar.get() );
@@ -63,9 +63,9 @@ TEST ( argparse, char_flags )
 TEST ( argparse, string_flags )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::ParameterXX<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
-  args::ParameterXX<std::string> bar ( parser, "BAR", "test flag", {'b', "bar"}, "defalut" );
-  args::ParameterXX<std::string> baz ( parser, "BAZ", "test flag", {'a', "baz"}, "default" );
+  args::Parameter<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
+  args::Parameter<std::string> bar ( parser, "BAR", "test flag", {'b', "bar"}, "defalut" );
+  args::Parameter<std::string> baz ( parser, "BAZ", "test flag", {'a', "baz"}, "default" );
   parser.parseArgs ( std::vector<std::string>{"--foo", "foo_string", "-b", "bar_string"} );
   ASSERT_EQ ( "foo_string",  foo.get());
   ASSERT_EQ ( "bar_string",  bar.get() );
@@ -75,7 +75,7 @@ TEST ( argparse, string_flags )
 TEST ( argparse, DISABLED_string_with_spaces )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::ParameterXX<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
+  args::Parameter<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
   parser.parseArgs ( std::vector<std::string>{"--foo", "\"foo string\"", "-b", "bar_string"} );
   std::cout << foo.get() << std::endl;
   ASSERT_EQ ( "\"foo string\"",  foo.get() );
@@ -109,7 +109,7 @@ std::istream& operator>>(std::istream &input,MyType &o)
    const int argc = sizeof(argv) / sizeof(char*) -1;
    const MyType foo_default{42,"foo"};
    args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-   args::ParameterXX<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
+   args::Parameter<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
    parser.parseArgs ( argc, argv );
 
    const MyType foo_expected{0,"xxxx"};
@@ -122,7 +122,7 @@ std::istream& operator>>(std::istream &input,MyType &o)
 // {
 //   const MyType foo_default{42,"foo"};
 //   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-//   args::ParameterXX<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
+//   args::Parameter<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
 //   parser.parseArgs ( std::vector<std::string>{} );
 
 //   ASSERT_EQ ( foo_default,  foo.get());

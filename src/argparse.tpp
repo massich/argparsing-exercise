@@ -1,5 +1,5 @@
 template < typename T >
-void args::ParameterXX<T>::show(std::ostream &os)
+void args::Parameter<T>::show(std::ostream &os)
 {
   for (auto &f: this->flags)
     {
@@ -9,7 +9,7 @@ void args::ParameterXX<T>::show(std::ostream &os)
 }
 
 template < typename T >
-void args::ParameterXX<T>::update(std::vector<std::string> &args)
+void args::Parameter<T>::update(std::vector<std::string> &args)
 {
   for (auto &f: this->flags)
     {
@@ -26,7 +26,7 @@ void args::ParameterXX<T>::update(std::vector<std::string> &args)
 }
 
 template < typename T >
-T args::ParameterXX<T>::get()
+T args::Parameter<T>::get()
 {
   return this->value;
 }

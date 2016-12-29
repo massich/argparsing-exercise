@@ -123,40 +123,29 @@ namespace args
       Flag(p, name_, description_, flags_) {}
   };
 
-  // template <typename Parameter_type>
-  // using Parameter_type = typename int;
+  template < typename T >
   class Parameter: public Observer
   {
   protected:
     std::string name;
     std::string description;
     std::vector<FlagId> flags;
-
-  public:
-    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-               std::initializer_list<FlagId> flags_):
-      name(name_),
-      description(description_),
-      flags(flags_)
-    {
-      p.add_parameter(this);
-    }
-  };
-
-  template < typename T >
-  class ParameterXX : public Parameter
-  {
     T value;
 
   public:
-    ParameterXX( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-                  std::initializer_list<FlagId> flags_, const T &default_value):
-      Parameter(p, name_, description_, flags_), value(default_value) {};
+    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+               std::initializer_list<FlagId> flags_, const T &default_value):
+      name(name_),
+      description(description_),
+      flags(flags_),
+      value(default_value)
+    {
+      p.add_parameter(this);
+    }
 
     /* virtual */void update(std::vector<std::string> &args) override;
     /* virtual */void show(std::ostream &os) override;
     T get();
-
   };
 
   std::vector<std::string> string2tokens(int argc, const char *const *argv);
