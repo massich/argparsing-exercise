@@ -14,6 +14,7 @@
 namespace args
 {
 
+  std::vector<std::string> string2tokens(int argc, const char *const *argv);
   class Error : public std::runtime_error
   {
   public:
@@ -40,10 +41,6 @@ namespace args
   public:
     virtual void update(std::vector<std::string> &args) = 0;
     virtual void show(std::ostream &os) = 0;
-    // @TODO: the getter should be here but then I don't know how to template the output
-    // auto get() = 0; ?????
-    // template <typename Parameter>
-    // virtual Parameter get() = 0;
   };
 
   class ArgumentParser
@@ -95,34 +92,6 @@ namespace args
   };
 
 
-  class Flag : public Observer
-  {
-    std::string name;
-    std::string description;
-    std::vector<FlagId> flags;
-    bool value;
-
-  public:
-    Flag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ):
-      name(name_),
-      description(description_),
-      flags(flags_),
-      value(false)
-    {
-      p.add_parameter(this);
-    }
-    /* virtual */void update(std::vector<std::string> &args);
-    /* virtual */void show(std::ostream &os);
-    bool get();
-  };
-
-  class HelpFlag : public Flag
-  {
-  public:
-    HelpFlag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ) :
-      Flag(p, name_, description_, flags_) {}
-  };
-
   template < typename T >
   class Parameter: public Observer
   {
@@ -148,7 +117,23 @@ namespace args
     T get();
   };
 
-  std::vector<std::string> string2tokens(int argc, const char *const *argv);
+  class Flag : public Parameter<bool>
+  {
+
+  public:
+    Flag( ArgumentParser &p, const std::string &name_, const std::string &description_,
+          std::initializer_list<FlagId> flags_ ):
+      Parameter( p, name_, description_, flags_, false){}
+
+    /* virtual */void update(std::vector<std::string> &args) override;
+  };
+
+  class HelpFlag : public Flag
+  {
+  public:
+    HelpFlag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ) :
+      Flag(p, name_, description_, flags_) {}
+  };
 }
 
 std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser);

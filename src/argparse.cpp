@@ -85,11 +85,6 @@ std::string flagId_to_string(const args::FlagId &f)
   return out;
 }
 
-bool args::Flag::get()
-{
-  return this->value;
-}
-
 void args::Flag::update(std::vector<std::string> &args)
 {
   for (auto &f: this->flags)
@@ -102,15 +97,6 @@ void args::Flag::update(std::vector<std::string> &args)
       break;
     }
   }
-}
-
-void args::Flag::show(std::ostream &os)
-{
-  for (auto &f: this->flags)
-    {
-      os << flagId_to_string(f) + ", ";
-    }
-  os << "\t" << this->description ;
 }
 
 namespace{
