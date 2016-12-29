@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include "src/argparse.h"
 
 int main(int argc, char **argv)

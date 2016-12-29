@@ -3,6 +3,10 @@
 
 #include "argparse.h"
 
+namespace{
+
+}
+
 TEST ( argparse_exception_throw, help_exception_if_help_flag_or_noargs)
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
@@ -109,7 +113,7 @@ std::istream& operator>>(std::istream &input,MyType &o)
    parser.parseArgs ( argc, argv );
 
    const MyType foo_expected{0,"xxxx"};
-   const MyType foo_answer = foo.get(); 
+   const MyType foo_answer = foo.get();
 
    ASSERT_EQ ( foo_expected,  foo_answer);
  }
