@@ -110,30 +110,35 @@ std::istream& operator>>(std::istream &input,MyType &o)
 }
 
 
- TEST ( argparse, multi_parameter )
- {
-   const char* argv[] = {"./test", "--foo", "0", "xxxx", NULL};
-   const int argc = sizeof(argv) / sizeof(char*) -1;
-   const MyType foo_default{42,"foo"};
-   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-   args::Parameter<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
-   parser.parseArgs ( argc, argv );
+TEST ( argparse, multi_parameter )
+{
+  const char* argv[] = {"./test", "--foo", "0", "xxxx", NULL};
 
-   const MyType foo_expected{0,"xxxx"};
-   const MyType foo_answer = foo.get();
+  const MyType foo_default{42,"foo"};
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Parameter<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
+  parser.parseArgs ( get_argc(argv), argv );
 
-   ASSERT_EQ ( foo_expected,  foo_answer);
- }
+  const MyType foo_expected{0,"xxxx"};
+  const MyType foo_answer = foo.get();
 
-// TEST ( argparse, multi_parameter_defaults )
-// {
-//   const MyType foo_default{42,"foo"};
-//   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-//   args::Parameter<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
-//   parser.parseArgs ( std::vector<std::string>{} );
+  ASSERT_EQ ( foo_expected,  foo_answer);
+}
 
-//   ASSERT_EQ ( foo_default,  foo.get());
-// }
+TEST ( argparse, multi_parameter_default )
+{
+  const char* argv[] = {"./test", NULL};
+
+  const MyType foo_default{42,"foo"};
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Parameter<MyType> foo ( parser, "FOO", "test single mult-parameter", {'f', "foo"}, foo_default );
+  parser.parseArgs ( get_argc(argv), argv );
+
+  const MyType foo_answer = foo.get();
+
+  ASSERT_EQ ( foo_default,  foo_answer);
+}
+
 
 TEST ( argparse_string2tokens, when_empty)
 {
