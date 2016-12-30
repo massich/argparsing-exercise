@@ -4,14 +4,21 @@
 #include "argparse.h"
 
 namespace{
+  const int get_argc(const char* const *argv)
+  {
+    int count = 0;
+    const char * const * it = argv;
+    for (; (*it!=NULL) ; ++count, ++it) {}
+    return count;
+  }
 
 }
 
 TEST ( argparse_exception_throw, help_exception_if_help_flag_or_noargs)
 {
-  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::HelpFlag help ( parser, "help", "Display this help menu", {'h', "help"} );
-  ASSERT_NO_THROW ( parser.parseArgs(std::vector<std::string>{}) );
+args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+args::HelpFlag help ( parser, "help", "Display this help menu", {'h', "help"} );
+ASSERT_NO_THROW ( parser.parseArgs(std::vector<std::string>{}) );
   ASSERT_THROW ( parser.parseArgs("--help"), args::Help );
 }
 
@@ -148,10 +155,10 @@ TEST ( argparse_string2tokens, when_flag)
 TEST ( argparse_string2tokens, when_element)
 {
   const char* argv[] = {"./test", "--foo", "FOO", "3", NULL};
-  const int argc = sizeof(argv) / sizeof(char*) -1;
-  const auto answer = args::string2tokens(argc, argv );
+  const auto answer = args::string2tokens( get_argc(argv), argv );
   const std::vector<std::string> expected_answer {"--foo", " FOO 3"};
   ASSERT_EQ( expected_answer, answer );
+
 }
 
 int main(int ac, char* av[])
