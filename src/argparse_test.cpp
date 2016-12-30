@@ -14,12 +14,12 @@ namespace{
 
 }
 
-TEST ( argparse_exception_throw, help_exception_if_help_flag_or_noargs)
+TEST ( argparse_exception_throw, help_exception_if_help_flag)
 {
-args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-args::HelpFlag help ( parser, "help", "Display this help menu", {'h', "help"} );
-ASSERT_NO_THROW ( parser.parseArgs(std::vector<std::string>{}) );
-  ASSERT_THROW ( parser.parseArgs("--help"), args::Help );
+  const char* argv[] = {"./test", "--help", NULL};
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::HelpFlag help ( parser, "help", "Display this help menu", {'h', "help"} );
+  ASSERT_THROW ( parser.parseArgs( get_argc(argv), argv), args::Help );
 }
 
 // TEST ( argparse_exception_throw, unknon_flag_exception )
@@ -81,9 +81,10 @@ TEST ( argparse, string_flags )
 
 TEST ( argparse, DISABLED_string_with_spaces )
 {
+  const char* argv[] = {"./test", "--foo", "\"foo string\"", NULL};
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
   args::Parameter<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
-  parser.parseArgs ( std::vector<std::string>{"--foo", "\"foo string\"", "-b", "bar_string"} );
+  parser.parseArgs ( get_argc(argv), argv );
   std::cout << foo.get() << std::endl;
   ASSERT_EQ ( "\"foo string\"",  foo.get() );
 }

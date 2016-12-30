@@ -78,7 +78,6 @@ namespace args
      * \return the iterator after the last parsed value.  Only useful for kick-out
      */
     // template <typename T> void ParseArgs(const T &args);
-    void parseArgs(const std::string &args);
     void parseArgs(const std::vector<std::string> &args);
     void parseArgs(int argc, const char *const *argv);
   };
@@ -134,6 +133,7 @@ namespace args
   public:
     HelpFlag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ) :
       Flag(p, name_, description_, flags_) {}
+    /* virtual */void update(std::vector<std::string> &args) override;
   };
 }
 

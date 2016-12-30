@@ -3,13 +3,6 @@
 #include <algorithm>
 #include "argparse.h"
 
-// template <typename T> void args::ArgumentParser::ParseArgs(const T &args)
-void args::ArgumentParser::parseArgs(const std::string &args)
-{
-  std::cout << "ParseArgs string" << std::endl;
-  throw Help("parseArgs string error");
-}
-
 void args::ArgumentParser::parseArgs(const std::vector<std::string> &args)
 {
   std::vector<std::string> consumible_args(args);
@@ -97,6 +90,18 @@ void args::Flag::update(std::vector<std::string> &args)
       break;
     }
   }
+}
+
+void args::HelpFlag::update(std::vector<std::string> &args)
+{
+  for (auto &f: this->flags)
+    {
+      auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
+      if ( it != args.end() )
+        {
+          throw Help("parseArgs string error");
+        }
+    }
 }
 
 namespace{
