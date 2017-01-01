@@ -31,6 +31,15 @@ TEST ( argparse_exception_throw, help_exception_if_help_flag)
 //   ASSERT_THROW ( args::ParseError, parser.ParseArgs(std::vector<std::string>{"-H"}) );
 // }
 
+TEST ( argparse_exception_throw, type_mismatch )
+{
+  const char* argv[] = {"./test", "-f", "this is not an integer", NULL};
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Parameter<int> foo ( parser, "FOO", "test integer", {'f', "foo"}, 0 );
+  ASSERT_THROW ( parser.parseArgs( get_argc(argv), argv), args::ParseError );
+}
+
+
 TEST ( argparse, boolean_flags )
 {
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );

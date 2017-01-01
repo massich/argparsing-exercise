@@ -19,21 +19,19 @@ namespace args
   {
   public:
     Error(const std::string &problem) : std::runtime_error(problem) {}
-    virtual ~Error() {};
+    virtual ~Error()=default;
   };
 
   class Help : public Error
   {
   public:
     Help(const std::string &flag) : Error(flag) {}
-    virtual ~Help() {};
   };
 
   class ParseError : public Error
   {
   public:
     ParseError(const std::string &flag) : Error(flag) {}
-    virtual ~ParseError() {};
   };
 
   class Observer
