@@ -17,7 +17,11 @@ void args::Parameter<T>::update(std::vector<std::string> &args)
       if ( it != args.end() )
         {
           auto element_it = it;
-          std::stringstream(*(++element_it)) >> this->value;
+          if( !(std::stringstream(*(++element_it)) >> this->value) )
+          {
+            std::string flag = "\"" + *element_it + "\" can't be converted into " + typeid(this->value).name();
+            throw ParseError(flag);
+          }
           element_it = args.erase(element_it);
           it = args.erase(it);
           break;
