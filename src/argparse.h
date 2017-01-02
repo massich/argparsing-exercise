@@ -35,6 +35,12 @@ namespace args
     ParseError(const std::string &flag) : Error(flag) {}
   };
 
+  class UnknownParameter : public Error
+  {
+  public:
+    UnknownParameter(const std::string &flag) : Error(flag) {}
+  };
+
   class Observer
   {
   public:

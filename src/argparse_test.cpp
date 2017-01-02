@@ -39,6 +39,14 @@ TEST ( argparse_exception_throw, type_mismatch )
   ASSERT_THROW ( parser.parseArgs( get_argc(argv), argv), args::ParseError );
 }
 
+TEST ( argparse_exception_throw, unknown_parameter )
+{
+  const char* argv[] = {"./test", "--foo", "--bar", NULL};
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Flag foo ( parser, "FOO", "test flag", {'f', "foo"} );
+  ASSERT_THROW ( parser.parseArgs( get_argc(argv), argv), args::UnknownParameter );
+}
+
 
 TEST ( argparse, boolean_flags )
 {
