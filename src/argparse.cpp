@@ -3,14 +3,26 @@
 #include <algorithm>
 #include "argparse.h"
 
+std::string get_and_eliminate_program_call( std::vector<std::string> &consumible_args )
+{
+  assert(!consumible_args.empty());
+  std::string program_call = *consumible_args.begin();
+  consumible_args.erase(consumible_args.begin());
+  return program_call;
+}
+
 void args::ArgumentParser::parseArgs(const std::vector<std::string> &args)
 {
   std::vector<std::string> consumible_args(args);
+  program_call = get_and_eliminate_program_call( consumible_args );
   for (const auto p: _parameters)
     {
       p->update(consumible_args);
     }
-  int i=0;
+  if (!consumible_args.empty())
+    {
+      throw UnknownParameter("UnknownParameter");
+    }
 }
 
 void args::ArgumentParser::add_parameter ( Observer *p)

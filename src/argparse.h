@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include <typeinfo>
+#include <assert.h>
 
 #include <vector>
 #include <algorithm>
@@ -52,6 +53,7 @@ namespace args
   class ArgumentParser
   {
   private:
+    std::string program_call;
     std::string description;
     std::string epilog;
 
