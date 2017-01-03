@@ -11,10 +11,11 @@ std::string get_and_eliminate_program_call( std::vector<std::string> &consumible
   return program_call;
 }
 
+
 void args::ArgumentParser::parseArgs(const std::vector<std::string> &args)
 {
   std::vector<std::string> consumible_args(args);
-  // program_call = get_and_eliminate_program_call( consumible_args );
+  program_call = get_and_eliminate_program_call( consumible_args );
   for (const auto p: _parameters)
     {
       p->update(consumible_args);
@@ -140,7 +141,6 @@ namespace{
     std::vector<std::string> result;
     auto k_it = keys.begin();
     auto v_it = values.begin();
-    int i;
     for (; k_it < keys.end(); ++k_it, ++v_it)
       {
         result.push_back(*k_it);
@@ -169,7 +169,10 @@ std::vector<std::string> args::string2tokens(int argc, const char *const *argv)
         v.append(" "+a);
       }
   }
-
   push_previous_parameter(keys, values, k, v);
-  return merge_keys_and_values( keys, values);
+
+  auto result = merge_keys_and_values( keys, values);
+  result.insert(result.begin(), std::string(argv[0]));
+
+  return result;
 }

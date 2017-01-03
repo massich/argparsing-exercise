@@ -54,7 +54,7 @@ TEST ( argparse, boolean_flags )
   args::Flag foo ( parser, "FOO", "test flag", {'f', "foo"} );
   args::Flag bar ( parser, "BAR", "test flag", {'b', "bar"} );
   args::Flag baz ( parser, "BAZ", "test flag", {'a', "baz"} );
-  parser.parseArgs ( std::vector<std::string>{"--foo", "-b"} );
+  parser.parseArgs ( std::vector<std::string>{"./test", "--foo", "-b"} );
   ASSERT_EQ ( true,  foo.get());
   ASSERT_EQ ( true,  bar.get() );
   ASSERT_EQ ( false, baz.get() );
@@ -66,7 +66,7 @@ TEST ( argparse, int_flags )
   args::Parameter<int> foo ( parser, "FOO", "test flag", {'f', "foo"}, 0 );
   args::Parameter<int> bar ( parser, "BAR", "test flag", {'b', "bar"}, 0 );
   args::Parameter<int> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 0 );
-  parser.parseArgs ( std::vector<std::string>{"--foo", "700", "-b", "8"} );
+  parser.parseArgs ( std::vector<std::string>{"./test", "--foo", "700", "-b", "8"} );
   ASSERT_EQ ( 700,  foo.get());
   ASSERT_EQ ( 8,  bar.get() );
   ASSERT_EQ ( 0, baz.get() );
@@ -78,7 +78,7 @@ TEST ( argparse, char_flags )
   args::Parameter<char> foo ( parser, "FOO", "test flag", {'f', "foo"}, 'a' );
   args::Parameter<char> bar ( parser, "BAR", "test flag", {'b', "bar"}, 'a' );
   args::Parameter<char> baz ( parser, "BAZ", "test flag", {'a', "baz"}, 'a' );
-  parser.parseArgs ( std::vector<std::string>{"--foo", "f", "-b", "b"} );
+  parser.parseArgs ( std::vector<std::string>{"./test", "--foo", "f", "-b", "b"} );
   ASSERT_EQ ( 'f',  foo.get());
   ASSERT_EQ ( 'b',  bar.get() );
   ASSERT_EQ ( 'a', baz.get() );
@@ -90,7 +90,7 @@ TEST ( argparse, string_flags )
   args::Parameter<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
   args::Parameter<std::string> bar ( parser, "BAR", "test flag", {'b', "bar"}, "defalut" );
   args::Parameter<std::string> baz ( parser, "BAZ", "test flag", {'a', "baz"}, "default" );
-  parser.parseArgs ( std::vector<std::string>{"--foo", "foo_string", "-b", "bar_string"} );
+  parser.parseArgs ( std::vector<std::string>{"./test", "--foo", "foo_string", "-b", "bar_string"} );
   ASSERT_EQ ( "foo_string",  foo.get());
   ASSERT_EQ ( "bar_string",  bar.get() );
   ASSERT_EQ ( "default",  baz.get() );
@@ -163,7 +163,8 @@ TEST ( argparse_string2tokens, when_empty)
   const std::string input="./test";
   const char* argv = &input[0];
   const auto answer = args::string2tokens(1, &argv );
-  EXPECT_TRUE(answer.empty());
+  const std::vector<std::string> expected_answer {"./test"};
+  ASSERT_EQ( expected_answer, answer );
 }
 
 TEST ( argparse_string2tokens, when_flag)
@@ -171,7 +172,7 @@ TEST ( argparse_string2tokens, when_flag)
   const char* argv[] = {"./test", "--foo", NULL};
   const int argc = sizeof(argv) / sizeof(char*) -1;
   const auto answer = args::string2tokens(argc, argv );
-  const std::vector<std::string> expected_answer {"--foo", ""};
+  const std::vector<std::string> expected_answer {"./test", "--foo", ""};
   ASSERT_EQ( expected_answer, answer );
 }
 
@@ -179,7 +180,7 @@ TEST ( argparse_string2tokens, when_element)
 {
   const char* argv[] = {"./test", "--foo", "FOO", "3", NULL};
   const auto answer = args::string2tokens( get_argc(argv), argv );
-  const std::vector<std::string> expected_answer {"--foo", " FOO 3"};
+  const std::vector<std::string> expected_answer {"./test", "--foo", " FOO 3"};
   ASSERT_EQ( expected_answer, answer );
 
 }
