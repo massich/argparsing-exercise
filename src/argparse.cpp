@@ -14,7 +14,7 @@ std::string get_and_eliminate_program_call( std::vector<std::string> &consumible
 void args::ArgumentParser::parseArgs(const std::vector<std::string> &args)
 {
   std::vector<std::string> consumible_args(args);
-  program_call = get_and_eliminate_program_call( consumible_args );
+  // program_call = get_and_eliminate_program_call( consumible_args );
   for (const auto p: _parameters)
     {
       p->update(consumible_args);
