@@ -34,7 +34,14 @@ void args::ArgumentParser::add_parameter ( Observer *p)
 void args::ArgumentParser::parseArgs(int argc, const char *const *argv)
 {
   const auto arguments = string2tokens(argc, argv);
-  this->parseArgs(arguments);
+  try{
+    this->parseArgs(arguments);
+  }
+  catch ( Help& e)
+    {
+      this->display_help(std::cout);
+      throw e;
+    }
 }
 
 void args::ArgumentParser::display_help(std::ostream &help) const
