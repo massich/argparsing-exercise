@@ -42,12 +42,26 @@ namespace args
     UnknownParameter(const std::string &flag) : Error(flag) {}
   };
 
+  struct FlagId{
+    const bool isShort;
+    const char shortId;
+    const std::string longId;
+    FlagId(const std::string &flag) : isShort(false), shortId(), longId(flag) {}
+    FlagId(const char *flag) : isShort(false), shortId(), longId(flag) {}
+    FlagId(const char flag) : isShort(true), shortId(flag), longId() {}
+  };
+
   class Observer
   {
+  protected:
+    virtual void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) = 0;
   public:
+    Observer( std::initializer_list<FlagId> flags_ ) : flags(flags_) {}
     virtual ~Observer() = default;
-    virtual void update(std::vector<std::string> &args) = 0;
+    void update(std::vector<std::string> &args);
     virtual void show(std::ostream &os) = 0;
+    //private:
+    std::vector<FlagId> flags;
   };
 
   class ArgumentParser
@@ -89,14 +103,6 @@ namespace args
     void parseArgs(int argc, const char *const *argv);
   };
 
-  struct FlagId{
-    const bool isShort;
-    const char shortId;
-    const std::string longId;
-    FlagId(const std::string &flag) : isShort(false), shortId(), longId(flag) {}
-    FlagId(const char *flag) : isShort(false), shortId(), longId(flag) {}
-    FlagId(const char flag) : isShort(true), shortId(flag), longId() {}
-  };
 
 
   template < typename T >
@@ -105,21 +111,20 @@ namespace args
   protected:
     std::string name;
     std::string description;
-    std::vector<FlagId> flags;
     T value;
 
   public:
     Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
                std::initializer_list<FlagId> flags_, const T &default_value):
+      Observer(flags_),
       name(name_),
       description(description_),
-      flags(flags_),
       value(default_value)
     {
       p.add_parameter(this);
     }
 
-    /* virtual */void update(std::vector<std::string> &args) override;
+    /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
     /* virtual */void show(std::ostream &os) override;
     T get();
   };
@@ -132,7 +137,7 @@ namespace args
           std::initializer_list<FlagId> flags_ ):
       Parameter( p, name_, description_, flags_, false){}
 
-    /* virtual */void update(std::vector<std::string> &args) override;
+    /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
   };
 
   class HelpFlag : public Flag
@@ -140,7 +145,8 @@ namespace args
   public:
     HelpFlag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ) :
       Flag(p, name_, description_, flags_) {}
-    /* virtual */void update(std::vector<std::string> &args) override;
+
+    /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
   };
 }
 

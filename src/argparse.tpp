@@ -9,24 +9,14 @@ void args::Parameter<T>::show(std::ostream &os)
 }
 
 template < typename T >
-void args::Parameter<T>::update(std::vector<std::string> &args)
+void args::Parameter<T>::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args)
 {
-  for (auto &f: this->flags)
+    if( !(std::stringstream(*(++it)) >> this->value) )
     {
-      auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
-      if ( it != args.end() )
-        {
-          auto element_it = it;
-          if( !(std::stringstream(*(++element_it)) >> this->value) )
-          {
-            std::string flag = "\"" + *element_it + "\" can't be converted into " + typeid(this->value).name();
-            throw ParseError(flag);
-          }
-          element_it = args.erase(element_it);
-          it = args.erase(it);
-          break;
-        }
+      std::string flag = "\"" + *it + "\" can't be converted into " + typeid(this->value).name();
+      throw ParseError(flag);
     }
+    args.erase(it);
 }
 
 template < typename T >

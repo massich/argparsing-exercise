@@ -98,30 +98,28 @@ std::string flagId_to_string(const args::FlagId &f)
   return out;
 }
 
-void args::Flag::update(std::vector<std::string> &args)
-{
-  for (auto &f: this->flags)
-  {
-    auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
-    if ( it != args.end() )
-    {
-      this->value = true;
-      it = args.erase(it);
-      break;
-    }
-  }
-}
-
-void args::HelpFlag::update(std::vector<std::string> &args)
+void args::Observer::update(std::vector<std::string> &args)
 {
   for (auto &f: this->flags)
     {
       auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
       if ( it != args.end() )
         {
-          throw Help("parseArgs string error");
+          _update_and_consume_if_necessary( it, args );
+          it = args.erase(it);
+          break;
         }
     }
+}
+
+void args::Flag::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args )
+{
+    this->value = true;
+}
+
+void args::HelpFlag::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args )
+{
+    throw Help("parseArgs string error");
 }
 
 namespace{
