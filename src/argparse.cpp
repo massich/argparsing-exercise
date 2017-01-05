@@ -145,6 +145,7 @@ namespace{
   std::vector<std::string> merge_keys_and_values(std::vector<std::string> &keys,
                                                  std::vector<std::string> &values)
   {
+    assert(keys.size() == values.size());
     std::vector<std::string> result;
     auto k_it = keys.begin();
     auto v_it = values.begin();
