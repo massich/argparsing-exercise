@@ -5,6 +5,7 @@
 #include <array>
 #include <typeinfo>
 #include <assert.h>
+#include <functional>
 
 #include <vector>
 #include <algorithm>
@@ -137,11 +138,12 @@ namespace args
       Parameter( p, name_, description_, flags_, false){}
 
     Flag( ArgumentParser &p, const std::string &name_, const std::string &description_,
-          std::initializer_list<FlagId> flags_ , void (*action_)(void)):
+          std::initializer_list<FlagId> flags_ , std::function<void ()> action_):
       Parameter( p, name_, description_, flags_, false), action(action_){}
 
     /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
-    void (*action)(void);
+    // void (*action)(void);
+    std::function<void ()> action;
   };
 
   class HelpFlag : public Flag
