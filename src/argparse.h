@@ -131,13 +131,17 @@ namespace args
 
   class Flag : public Parameter<bool>
   {
-
   public:
     Flag( ArgumentParser &p, const std::string &name_, const std::string &description_,
           std::initializer_list<FlagId> flags_ ):
       Parameter( p, name_, description_, flags_, false){}
 
+    Flag( ArgumentParser &p, const std::string &name_, const std::string &description_,
+          std::initializer_list<FlagId> flags_ , void (*action_)(void)):
+      Parameter( p, name_, description_, flags_, false), action(action_){}
+
     /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
+    void (*action)(void);
   };
 
   class HelpFlag : public Flag
