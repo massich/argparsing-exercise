@@ -1,7 +1,5 @@
 #include <iostream>
-
-void print_hi() { std::cout << "hi" << std::endl;}
-void print_foo() { std::cout << "foo" << std::endl;}
+#include <string>
 
 template <typename T>
 struct Foo
@@ -15,9 +13,23 @@ public:
   { std::cout << "this is the template, and the value is " << val << std::endl;}
 };
 
+template <>
+struct Foo<std::string>
+{
+private:
+  std::string val;
+public:
+  Foo( const std::string &val_): val(val_) {}
+  std::string get(){ return val; }
+  void print()
+  { std::cout << "this is the specification, and the value is " << val << std::endl;}
+};
+
 int main()
 {
   Foo<int> foo(3);
   foo.print();
+  Foo<std::string> bar("Bar");
+  bar.print();
   return 0;
 }
