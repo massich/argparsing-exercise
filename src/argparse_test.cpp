@@ -191,7 +191,7 @@ TEST ( argparse_actions, simple_call )
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
   args::Flag foo ( parser, "FOO", "test flag", {'f', "foo"}, [&value](){ value++;} );
   parser.parseArgs ( std::vector<std::string>{"./test", "--foo" });
-  foo.action();
+  parser.process();
   ASSERT_EQ ( 1,  value );
 }
 

@@ -54,12 +54,17 @@ namespace args
 
   class Observer
   {
+    bool matched;
+    std::function<void ()> action;
   protected:
     virtual void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) = 0;
   public:
-    Observer( std::initializer_list<FlagId> flags_ ) : flags(flags_) {}
+    Observer( std::initializer_list<FlagId> flags_ ) : flags(flags_), matched(false) {}
+    Observer( std::initializer_list<FlagId> flags_, std::function<void ()> action_):
+      flags(flags_), matched(false), action(action_) {}
     virtual ~Observer() = default;
     void update(std::vector<std::string> &args);
+    void process();
     virtual void show(std::ostream &os) = 0;
     //private:
     std::vector<FlagId> flags;
@@ -102,6 +107,8 @@ namespace args
     // template <typename T> void ParseArgs(const T &args);
     void parseArgs(const std::vector<std::string> &args);
     void parseArgs(int argc, const char *const *argv);
+    void process();
+    void processArgs(int argc, const char *const *argv);
   };
 
 
@@ -125,6 +132,17 @@ namespace args
       p.add_parameter(this);
     }
 
+    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
+               std::initializer_list<FlagId> flags_, const T &default_value,
+               std::function<void ()> action_):
+      Observer(flags_, action_),
+      name(name_),
+      description(description_),
+      value(default_value)
+    {
+      p.add_parameter(this);
+    }
+
     /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
     /* virtual */void show(std::ostream &os) override;
     T get();
@@ -139,11 +157,10 @@ namespace args
 
     Flag( ArgumentParser &p, const std::string &name_, const std::string &description_,
           std::initializer_list<FlagId> flags_ , std::function<void ()> action_):
-      Parameter( p, name_, description_, flags_, false), action(action_){}
+      Parameter( p, name_, description_, flags_, false, action_ ) {}
 
     /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
     // void (*action)(void);
-    std::function<void ()> action;
   };
 
   class HelpFlag : public Flag

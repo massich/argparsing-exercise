@@ -44,6 +44,18 @@ void args::ArgumentParser::parseArgs(int argc, const char *const *argv)
     }
 }
 
+void args::ArgumentParser::process()
+{
+  for ( const auto p: _parameters)
+    p->process();
+}
+
+void args::ArgumentParser::processArgs(int argc, const char *const *argv)
+{
+  this->parseArgs( argc, argv );
+  this->process();
+}
+
 void args::ArgumentParser::display_help(std::ostream &help) const
 {
   bool hasoptions = false;
@@ -105,11 +117,17 @@ void args::Observer::update(std::vector<std::string> &args)
       auto it = std::find(args.begin(), args.end(), flagId_to_string(f));
       if ( it != args.end() )
         {
+          matched = true;
           _update_and_consume_if_necessary( it, args );
           it = args.erase(it);
           break;
         }
     }
+}
+
+void args::Observer::process()
+{
+  if ( matched && action ) { action(); }
 }
 
 void args::Flag::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args )
