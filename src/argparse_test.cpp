@@ -195,6 +195,13 @@ TEST ( argparse_actions, simple_call )
   ASSERT_EQ ( 1,  value );
 }
 
+TEST ( argparse_helper_functions, flagId_to_string)
+{
+  const args::FlagId f = 'f';
+  const args::FlagId foo = "foo";
+  ASSERT_EQ ( "-f", flagId_to_string(f) );
+  ASSERT_EQ ( "--foo", flagId_to_string(foo) );
+}
 
 int main(int ac, char* av[])
 {
