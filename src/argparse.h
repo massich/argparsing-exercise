@@ -25,12 +25,6 @@ namespace args
     virtual ~Error()=default;
   };
 
-  class Help : public Error
-  {
-  public:
-    Help(const std::string &flag) : Error(flag) {}
-  };
-
   class ParseError : public Error
   {
   public:
@@ -163,14 +157,6 @@ namespace args
     // void (*action)(void);
   };
 
-  class HelpFlag : public Flag
-  {
-  public:
-    HelpFlag( ArgumentParser &p, const std::string &name_, const std::string &description_ , std::initializer_list<FlagId> flags_ ) :
-      Flag(p, name_, description_, flags_) {}
-
-    /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
-  };
 }
 
 std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser);

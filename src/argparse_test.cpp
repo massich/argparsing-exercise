@@ -14,22 +14,6 @@ namespace{
 
 }
 
-TEST ( argparse_exception_throw, help_exception_if_help_flag)
-{
-  const char* argv[] = {"./test", "--help", NULL};
-  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-  args::HelpFlag help ( parser, "help", "Display this help menu", {'h', "help"} );
-  ASSERT_THROW ( parser.parseArgs( get_argc(argv), argv), args::Help );
-}
-
-// TEST ( argparse_exception_throw, unknon_flag_exception )
-// {
-//   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
-//   args::HelpFlag help ( parser, "help", "Display this help menu", {'h', "help"} );
-//   ASSERT_NO_THROW ( parser.ParseArgs(std::vector<std::string>{}) );
-//   ASSERT_THROW ( args::ParseError, parser.ParseArgs(std::vector<std::string>{"--Help"}) );
-//   ASSERT_THROW ( args::ParseError, parser.ParseArgs(std::vector<std::string>{"-H"}) );
-// }
 
 TEST ( argparse_exception_throw, type_mismatch )
 {

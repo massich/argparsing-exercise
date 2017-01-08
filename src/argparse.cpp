@@ -34,14 +34,7 @@ void args::ArgumentParser::add_parameter ( Observer *p)
 void args::ArgumentParser::parseArgs(int argc, const char *const *argv)
 {
   const auto arguments = string2tokens(argc, argv);
-  try{
-    this->parseArgs(arguments);
-  }
-  catch ( Help& e)
-    {
-      this->display_help(std::cout);
-      throw e;
-    }
+  this->parseArgs(arguments);
 }
 
 void args::ArgumentParser::process()
@@ -125,11 +118,6 @@ void args::Observer::process()
 void args::Flag::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args )
 {
     this->value = true;
-}
-
-void args::HelpFlag::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args )
-{
-    throw Help("parseArgs string error");
 }
 
 namespace{
