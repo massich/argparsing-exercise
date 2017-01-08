@@ -99,15 +99,7 @@ std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser)
 
 std::string flagId_to_string(const args::FlagId &f)
 {
-  std::string out("-");
-  if (f.isShort)
-    out.append(1, f.shortId);
-  else
-    {
-      out.append("-"+f.longId);
-    }
-  // @TODO return (f.isShort) ? "-"+f.shortId : "--"+f.longId;
-  return out;
+  return (f.isShort) ? std::string("-").append(1,f.shortId) : "--"+f.longId;
 }
 
 void args::Observer::update(std::vector<std::string> &args)
