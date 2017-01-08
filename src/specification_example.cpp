@@ -14,16 +14,8 @@ public:
 };
 
 template <>
-struct Foo<std::string>
-{
-private:
-  std::string val;
-public:
-  Foo( const std::string &val_): val(val_) {}
-  std::string get(){ return val; }
-  void print()
-  { std::cout << "this is the specification, and the value is " << val << std::endl;}
-};
+void Foo<std::string>::print()
+{ std::cout << "this is the specification, and the value is " << val << std::endl;}
 
 int main()
 {
