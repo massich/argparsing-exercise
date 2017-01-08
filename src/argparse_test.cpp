@@ -195,6 +195,14 @@ TEST ( argparse_actions, simple_call )
   ASSERT_EQ ( 1,  value );
 }
 
+TEST ( argparse_actions, display_help )
+{
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Flag help ( parser, "HELP", "help flag", {'h', "help"}, [&parser](){ std::cout << parser << std::endl;} );
+  parser.parseArgs ( std::vector<std::string>{"./test", "-h" });
+  parser.process();
+}
+
 TEST ( argparse_helper_functions, flagId_to_string)
 {
   const args::FlagId f = 'f';
