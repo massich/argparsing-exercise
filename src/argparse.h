@@ -142,40 +142,6 @@ namespace args
     T get();
   };
 
-  template <>
-  class Parameter<std::string> : public Observer
-  {
-  protected:
-    std::string name;
-    std::string description;
-    std::string value;
-
-  public:
-    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-               std::initializer_list<FlagId> flags_, const std::string &default_value):
-      Observer(flags_),
-      name(name_),
-      description(description_),
-      value(default_value)
-    {
-      p.add_parameter(this);
-    }
-
-    Parameter( ArgumentParser &p, const std::string &name_, const std::string &description_ ,
-               std::initializer_list<FlagId> flags_, const std::string &default_value,
-               std::function<void ()> action_):
-      Observer(flags_, action_),
-      name(name_),
-      description(description_),
-      value(default_value)
-    {
-      p.add_parameter(this);
-    }
-
-    /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
-    /* virtual */void show(std::ostream &os) override;
-    std::string get();
-  };
 
   class Flag : public Parameter<bool>
   {
