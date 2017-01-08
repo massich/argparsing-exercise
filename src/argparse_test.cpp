@@ -80,7 +80,7 @@ TEST ( argparse, string_flags )
   ASSERT_EQ ( "default",  baz.get() );
 }
 
-TEST ( argparse, DISABLED_string_with_spaces )
+TEST ( argparse, string_with_spaces )
 {
   const char* argv[] = {"./test", "--foo", "\"foo string\"", NULL};
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
