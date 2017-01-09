@@ -137,39 +137,10 @@ namespace args
       p.add_parameter(this);
     }
 
-    /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override
-    {
-      if( !(std::stringstream(*(++it)) >> this->value) )
-        {
-          std::string flag = "\"" + *it + "\" can't be converted into " + typeid(this->value).name();
-          // throw parseError(flag);
-        }
-      args.erase(it);
-    }
-
-    /* virtual */void show(std::ostream &os) override
-    {
-      for (auto &f: this->flags)
-        {
-          std::string out("-");
-          if (f.isShort)
-            {
-              out .append(1,f.shortId);
-
-            }else{
-            out=out + "-" + f.longId;
-          }
-          os << out + ", ";
-        }
-      os << "\t" << this->description ;
-    }
-
-    T get()
-    {
-      return this->value;
-    }
+    /* virtual */void _update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args ) override;
+    /* virtual */void show(std::ostream &os) override;
+    T get();
   };
-
 
   class Flag : public Parameter<bool>
   {
@@ -191,4 +162,5 @@ namespace args
 std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser);
 std::string flagId_to_string(const args::FlagId &f);
 
-// #include "argparse.tpp"
+
+#include "argparse.tpp"
