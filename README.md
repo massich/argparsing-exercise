@@ -4,7 +4,13 @@ This is a coding exercise to build an small and portable library for parsing com
 
 # Usage
 
-The idea is to create an `ArgumentParser` object, then create as ... 
+The idea is to create an `ArgumentParser` object, then create as many parameters
+as needed. The parameters can be of type `Parameter<T>`, `Flag`, or any derivate as long as `cin` is provided.
+`Parameter<T>` takes arguments while `Flag` take no arguments.
+Both `Parameter<T>` and `Flag` can be instantiated with a callback function.
+
+Use `ArgumentParser::parseArgs(...)` to parse the given call and set their values.
+`ArgumentParser::process()` to trigger the callback of all the parameters found in the call. (This process requires `parseArgs` to be runned before). `ArgumentParser::processArgs(...)` is a convenient function that run both `parseArgs` and `process`.
 
 # Examples
 
