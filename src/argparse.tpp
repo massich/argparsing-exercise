@@ -24,10 +24,3 @@ T args::Parameter<T>::get()
 {
   return this->value;
 }
-
-// template<>
-// void args::Parameter<std::string>::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args)
-// {
-//     this->value = std::string(*(++it));
-//     args.erase(it);
-// }
