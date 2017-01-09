@@ -1,6 +1,10 @@
 # Argument Parser Exercise
 
-This is a coding exercise to make my own version of the [arg](https://github.com/Taywee/args) library. The examples and the API and the exmples of this README are plainly ripped from the original.
+This is a coding exercise to build an small and portable library for parsing command line arguments.
+
+# Usage
+
+The idea is to create an `ArgumentParser` object, then create as ... 
 
 # Examples
 
@@ -17,7 +21,7 @@ int main(int argc, char **argv)
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
     try
     {
-        parser.ParseCLI(argc, argv);
+        parser.parseArgs(argc, argv);
     }
     catch (args::Help)
     {
