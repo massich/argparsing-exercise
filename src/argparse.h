@@ -186,12 +186,6 @@ namespace args
     // void (*action)(void);
   };
 
-  template<>
-  void Parameter<std::string>::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args)
-  {
-    this->value = std::string(*(++it));
-    args.erase(it);
-  }
 }
 
 std::ostream &operator<<(std::ostream &os, const args::ArgumentParser &parser);
