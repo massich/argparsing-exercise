@@ -170,7 +170,7 @@ std::vector<std::string> args::string2tokens(int argc, const char *const *argv)
       }
     else
       {
-        v.append(" "+a);
+        (v.empty()) ? v.append(a) : v.append(" "+a);
       }
   }
   push_previous_parameter(keys, values, k, v);

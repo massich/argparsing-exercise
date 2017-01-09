@@ -164,7 +164,7 @@ TEST ( argparse_string2tokens, when_element)
 {
   const char* argv[] = {"./test", "--foo", "FOO", "3", NULL};
   const auto answer = args::string2tokens( get_argc(argv), argv );
-  const std::vector<std::string> expected_answer {"./test", "--foo", " FOO 3"};
+  const std::vector<std::string> expected_answer {"./test", "--foo", "FOO 3"};
   ASSERT_EQ( expected_answer, answer );
 
 }
