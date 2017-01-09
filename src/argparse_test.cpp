@@ -31,6 +31,13 @@ TEST ( argparse_exception_throw, unknown_parameter )
   ASSERT_THROW ( parser.parseArgs( get_argc(argv), argv), args::UnknownParameter );
 }
 
+TEST ( argparse_exception_throw, unknown_parameter_no_throw )
+{
+  const char* argv[] = {"./test", "--foo", NULL};
+  args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
+  args::Flag foo ( parser, "FOO", "test flag", {'f', "foo"} );
+  ASSERT_NO_THROW ( parser.parseArgs( get_argc(argv), argv) );
+}
 
 TEST ( argparse, boolean_flags )
 {
@@ -86,7 +93,6 @@ TEST ( argparse, string_with_spaces )
   args::ArgumentParser parser ( "This is a test program.", "This goes after the options." );
   args::Parameter<std::string> foo ( parser, "FOO", "test flag", {'f', "foo"}, "defalut" );
   parser.parseArgs ( get_argc(argv), argv );
-  std::cout << foo.get() << std::endl;
   ASSERT_EQ ( "\"foo string\"",  foo.get() );
 }
 

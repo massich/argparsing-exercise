@@ -11,6 +11,17 @@ std::string get_and_eliminate_program_call( std::vector<std::string> &consumible
   return program_call;
 }
 
+namespace{
+  std::string get_unkParameter_message( const std::vector<std::string> &args)
+  {
+    std::ostringstream oss;
+    oss << args.size() << " unknown parameters:";
+    for (const auto &a : args) oss << " " << a << ",";
+    oss << '\n';
+    return oss.str();
+  }
+}
+
 
 void args::ArgumentParser::parseArgs(const std::vector<std::string> &args)
 {
@@ -22,7 +33,7 @@ void args::ArgumentParser::parseArgs(const std::vector<std::string> &args)
     }
   if (!consumible_args.empty())
     {
-      throw UnknownParameter("UnknownParameter");
+      throw UnknownParameter( get_unkParameter_message(consumible_args) );
     }
 }
 
