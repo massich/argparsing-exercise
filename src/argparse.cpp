@@ -128,7 +128,8 @@ void args::Observer::process()
 
 void args::Flag::_update_and_consume_if_necessary( std::vector<std::string>::iterator it, std::vector<std::string> &args )
 {
-    this->value = true;
+  args.erase(++it); // string2tokens adds "" for flags with no argument
+  this->value = true;
 }
 
 namespace{
