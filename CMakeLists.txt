@@ -13,6 +13,8 @@ add_executable(lambda_example src/lambda_example.cpp)
 add_executable(specification_example src/specification_example.cpp)
 add_executable(tuple_cin src/tuple_cin_example.cpp)
 
+add_executable(myTest readme_examples/first.cpp src/argparse.h src/argparse.cpp )
+
 add_executable(runUnitTest src/argparse.h src/argparse.cpp src/argparse_test.cpp)
 target_link_libraries(runUnitTest ${GTEST_MAIN_LIBRARIES} ${GTEST_LIBRARIES})
 
